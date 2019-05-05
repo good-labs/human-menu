@@ -1,0 +1,161 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300);
+@import url(https://fonts.googleapis.com/css?family=Pacifico);
+
+body {
+  background: #9a2a2a;
+  color: #333;
+  font-family: Pacifico, cursive;
+}
+.container {
+  border-radius:5px;
+  display: block;
+  width: 40%;
+  margin: 0px auto;
+  margin-top: 10%;
+  background: #fff;
+  padding: 20px;
+  box-shadow: 10px 15px 5px rgba(0,0,0,0.4);
+}
+.title {
+    font-weight:normal;
+    text-align: left;
+    color: white;
+    font-size: 60px;
+    padding: 20px 10px 0px 30px;
+}
+ul {
+  margin: 0;
+  padding: 0;
+}
+li * {
+  float: left;
+}
+li, h3 {
+  clear:both;
+  list-style:none;
+}
+input, button {
+  outline: none;
+}
+button {
+  background: none;
+  border: 0px;
+  color: #888;
+  font-size: 15px;
+  width: 60px;
+  margin: 10px 0 0;
+  font-family: Lato, sans-serif;
+  cursor: pointer;
+}
+button:hover {
+  color: #333;
+}
+
+h3{
+  font-size: 25px;
+  padding: 30px 0 10px;
+  margin: 0;
+  display: block;
+  margin: 0 0 20px 20px;
+  cursor: pointer;
+  font-family: 'Open Sans Condensed', sans-serif;
+
+}
+input[type="text"] {
+  margin: 0;
+  font-size: 18px;
+  line-height: 18px;
+  height: 18px;
+  padding: 10px;
+  border: none;
+  border-bottom: 2px solid #F4A460;
+  background: none;
+  color: #888;
+}
+input[type="text"]:focus {
+  color: #333;
+}
+
+input#newTask {
+  float: left;
+  width: 400px;
+}
+button:hover {
+  color:#222;
+}
+
+li {
+  overflow: hidden;
+  padding: 20px 20px;
+  border-bottom: 1px solid #ccc;
+}
+li > input[type="checkbox"] {
+  margin: 0 10px;
+  position: relative;
+  top: 15px;
+}
+li > label {
+  font-size: 18px;
+  line-height: 40px;
+  width: 237px;
+  padding: 0 0 0 11px;
+   word-wrap: break-word;
+}
+li >  input[type="text"] {
+  width: 226px;
+}
+li > .delete:hover {
+  color: #FF0000;
+}
+li > .edit:hover {
+  color: #32CD32;
+}
+#suggestions label{
+  color: red;
+  opacity: 0.4;
+}
+
+#completed-tasks label {
+  text-decoration: line-through;
+  color:#9ACD32 ;
+}
+
+ul li input[type=text] {
+  display:none;
+}
+
+ul li.editMode input[type=text] {
+  display:block;
+}
+
+ul li.editMode label {
+  display:none;
+}
+@media (max-width: 1024px){
+  .container{
+    width: 80%;
+  }
+}
+@media (max-width: 640px){
+  .container{
+    width:80%;
+    margin: 0 auto;
+    margin-top: 10%;
+  }
+  li > label {
+  font-size: 22px;
+  width: 100px;
+  }
+  li >  input[type="text"] {
+    width: 150px;
+  }
+   input#newTask{
+    width: 225px;
+  }
+}
+
+@media (max-width: 480px){
+  input#newTask{
+    width: 125px;
+  }
+}

@@ -1,5 +1,8 @@
 # The Human Menu
 
+[![https://good-labs.github.io/greater-good-affirmation/assets/images/badge.svg](https://good-labs.github.io/greater-good-affirmation/assets/images/badge.svg)](https://good-labs.github.io/greater-good-affirmation)
+[![Gitter](https://badges.gitter.im/good-labs/community.svg)](https://gitter.im/good-labs/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 The [Human Menu](https://www.github.com/good-labs/human-menu/) project 
 provides a prototype for a "human menu," or a selection of items
 that contrasts the tendency to mindlessly browse social media or similar
