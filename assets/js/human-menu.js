@@ -15,18 +15,18 @@ class HumanMenu {
         // Class Variables
         var hasStorage = (function() {
             try {
-                localStorage.setItem(mod, mod);
-                localStorage.removeItem(mod);
+                localStorage.setItem("human-menu-test", 'test');
+                localStorage.removeItem("human-menu-test");
                 return true;
             } catch (exception) {
                 return false;
             }
         });
 
-        this.hasStorage = hasStorage;
+        this.hasStorage = hasStorage();
 
         // If we find storage, load up elements
-        if (hasStorage == true) {
+        if (this.hasStorage == true) {
             this.storageLoad();
         }
     }
@@ -96,10 +96,10 @@ class HumanMenu {
             this.items["seen"] = Array();
         }
 
-        // If we have enough su
+        // If we have enough suggestions
         if (this.items["suggestions"].length >= this.number) {
             console.log("Updating human list...");
-            for(var i = this.items["suggestions"].length-1;i>=0;i--){
+            for(var i = 0; i<this.number; i++){
                 var randomItem = this.items["suggestions"].splice(Math.floor(Math.random()*this.items["suggestions"].length), 1);
 
                 // Add to seen
@@ -119,7 +119,7 @@ class HumanMenu {
     // Storage save methods
     storageSave() {
         if (this.hasStorage == true) {
-           localStorage.setItem('human-menu', this.items);    
+           localStorage.setItem('human-menu', JSON.stringify(this.items));
         }
     }
 
@@ -132,14 +132,18 @@ class HumanMenu {
     // Load previous suggestions and seen items
     storageLoad() {
 
-        var items = localStorage.getItem('human-menu')
+        console.log('Loading items from storage...')
+        var items = JSON.parse(localStorage.getItem('human-menu'));
+        console.log(items)
+
         if (items != null) {
 
             // The user has previous suggestions or seen items
             if ("suggestions" in items) {
+
                 // Add items that aren't found in either, for each of suggestions and seen
                 for (var i = 0; i < items["suggestions"].length; i++) {
-                    item = items["suggestions"][i]
+                    var item = items["suggestions"][i]
                     if ( !(this.items["suggestions"].includes(item)) && !(this.items["seen"].includes(item))) {
                         this.items["suggestions"].push(item)
                     }
@@ -147,7 +151,7 @@ class HumanMenu {
             }
             if ("seen" in items) {
                 for (var i = 0; i < items["seen"].length; i++) {
-                    item = items["seen"][i]
+                    var item = items["seen"][i]
                     if ( !(this.items["suggestions"].includes(item)) && !(this.items["seen"].includes(item))) {
                         this.items["seen"].push(item)
                     }
