@@ -7,10 +7,15 @@ class HumanMenu {
     };
 
     // The constructor is called to create local storage
-    constructor(number) {
+    constructor(number, suggestionsId, seenId, itemClass) {
         
         // The number to randomly select for the menu
         this.number = number || 5
+
+        // The div ids for suggestions and seen items
+        this.suggestionsId = suggestionsId || "#suggestions"
+        this.seenId = seenId || "#seen"
+        this.itemClass = itemClass || "human-menu-item"
 
         // Class Variables
         var hasStorage = (function() {
@@ -25,10 +30,24 @@ class HumanMenu {
 
         this.hasStorage = hasStorage();
 
+        // Tell the user the chosen parameters
+        this.status()
+
         // If we find storage, load up elements
         if (this.hasStorage == true) {
             this.storageLoad();
         }
+    }
+
+    // Print a status for the user
+    status() {
+
+        console.log("hasStorage: " + this.hasStorage)
+        console.log("number: " + this.number)
+        console.log("itemClass: " + this.itemClass)
+        console.log("suggestionsId: " + this.suggestionsId)
+        console.log("seenId: " + this.seenId)
+
     }
 
     // Set new item
@@ -39,6 +58,24 @@ class HumanMenu {
         }
     }
 
+    // Choose an item
+    chooseItem(event) {
+ 
+        var name = event.target.getAttribute('data-name')
+        console.log(this.items);
+        var index = this.items["suggestions"].indexOf(name);
+
+        // Non -1 index indicates we found it
+        if (index > -1) {
+            console.log('Choosing ' + name);
+            this.items['suggestions'].splice(index, 1);
+
+            // Add to seen if not seen
+            if (!this.items['seen'].includes(name)){
+                this.items["seen"].push(name);
+            }
+        }
+    }
 
     // Load suggestions into the csv
     load_csv(filename) {
@@ -108,8 +145,11 @@ class HumanMenu {
                 }
 
                 // Update interface
-                $("#suggestions").append("<li>" + randomItem[0] + "</li>") 
+                $(this.suggestionsId).append("<li class='human-menu-item' data-name='" + randomItem[0] + "'>" + randomItem[0] + "</li>") 
             }
+
+            // Bind the class to the correct function
+            //$("." + this.itemClass).on('click', this.chooseItem); 
  
         } else {
             console.log("Not enough items to populate list.")

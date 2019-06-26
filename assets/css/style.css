@@ -6,6 +6,21 @@ body {
   color: #333;
   font-family: Pacifico, cursive;
 }
+
+.human-menu-item:hover {
+  background-color: mistyrose;
+}
+
+.human-menu-item {
+  cursor: pointer;
+}
+
+/* These colors also look nice
+bisque
+lightcoral
+lightpink
+mistyrose*/
+
 .container {
   border-radius:5px;
   display: block;
