@@ -99,6 +99,7 @@ class HumanMenu {
     load_csv(filename) {
 
         filename = filename || "human-menu.csv";
+        this.filename = filename
 
         var promise = new Promise(function(resolve, reject) {
 
@@ -138,6 +139,20 @@ class HumanMenu {
     clearSuggestions() {
         $(this.suggestionsId).empty();
         this.update();
+    }
+
+    clearDone() {
+        $(this.doneId).empty();
+        this.update();
+    }
+
+    // Reset to original
+    reset() {
+        $(this.suggestionsId).empty();
+        $(this.doneId).empty();
+        this.storageClear();
+        this.items.suggestions = Array();
+        this.items.done = Array();
     }
 
     // Update methods

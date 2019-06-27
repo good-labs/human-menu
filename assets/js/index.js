@@ -15,4 +15,10 @@ $(document).ready(function() {
     $("#refreshButton").click(function() {
         menu.clearSuggestions();
     });
+
+    $("#resetButton").click(function() {
+        menu.reset();
+        menu.load_csv("human-menu.csv");
+    });
+
 });
