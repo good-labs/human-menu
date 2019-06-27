@@ -3,18 +3,18 @@ class HumanMenu {
     // Organize items by new / finished
     items = {
         suggestions: Array(),
-        seen: Array()
+        done: Array()
     };
 
     // The constructor is called to create local storage
-    constructor(number, suggestionsId, seenId, itemClass) {
+    constructor(number, suggestionsId, doneId, itemClass) {
         
         // The number to randomly select for the menu
         this.number = number || 5
 
         // The div ids for suggestions and seen items
         this.suggestionsId = suggestionsId || "#suggestions"
-        this.seenId = seenId || "#seen"
+        this.doneId = doneId || "#done"
         this.itemClass = itemClass || "human-menu-item"
 
         // Class Variables
@@ -46,35 +46,53 @@ class HumanMenu {
         console.log("number: " + this.number)
         console.log("itemClass: " + this.itemClass)
         console.log("suggestionsId: " + this.suggestionsId)
-        console.log("seenId: " + this.seenId)
+        console.log("doneId: " + this.doneId)
 
     }
 
     // Set new item
     addItem(name) {
-        if ( !(this.items["suggestions"].includes(name)) && !(this.items["seen"].includes(name))) {
+        if ( !(this.items.suggestions.includes(name)) && !(this.items.done.includes(name))) {
             console.log("Adding new item, " + name)
-            this.items["suggestions"].push(name)
+            this.items.suggestions.push(name)
         }
     }
 
-    // Choose an item
-    chooseItem(event) {
+    // Add an item to the suggestions shown
+    showSuggestion(name) {
+
+      // Update interface
+      $(this.suggestionsId).append("<li class='human-menu-item' data-name='" + name + "'>" + name + "</li>")
+      // Bind the class to the correct function
+      $("." + this.itemClass).on('click', {client: this}, this.chooseItemEvent);
+
+    }
+
+    // Choose an item (expects to be bound on click to element)
+    chooseItemEvent(event) {
  
         var name = event.target.getAttribute('data-name')
-        console.log(this.items);
-        var index = this.items["suggestions"].indexOf(name);
+        var client = event.data.client
+        var items = client.items
+        var index = items.suggestions.indexOf(name);
 
         // Non -1 index indicates we found it
         if (index > -1) {
             console.log('Choosing ' + name);
-            this.items['suggestions'].splice(index, 1);
 
-            // Add to seen if not seen
-            if (!this.items['seen'].includes(name)){
-                this.items["seen"].push(name);
+            // Remove from items
+            items.suggestions.splice(index, 1);
+
+            // Add to done if not seen
+            if (!items.done.includes(name)){
+                items.done.push(name);
             }
-        }
+
+            // Remove from suggestions, add to done
+            $(event.target).removeClass('human-menu-item');
+            $(event.target).appendTo(client.doneId);
+            client.storageSave(items)
+       }
     }
 
     // Load suggestions into the csv
@@ -109,57 +127,64 @@ class HumanMenu {
                 this.storageSave();
             }
 
-            // Update the web interface with suggested and seen
+            console.log(this.items);
             this.update();
 
+
         }.bind(this));
+    }
+
+    // Clear current suggestions
+    clearSuggestions() {
+        $(this.suggestionsId).empty();
+        this.update();
     }
 
     // Update methods
     update() {
 
         // If we don't have enough suggestions, refresh the list
-        if (this.items["suggestions"].length < this.number) {
+        if (this.items.suggestions.length < this.number) {
 
-            console.log("Ran out of new items, refreshing list.")
-            for(var i = 0; i<this.items["seen"].length;i++){
-                var item = this.items["seen"][i];
+            $.notify("Ran out of new items, refreshing list.", "info");
+            for(var i = 0; i<this.items.done.length;i++){
+                var item = this.items.done[i];
  
                 // Add to suggestions
-                if (!this.items["suggestions"].includes(item)) {
-                    this.items["suggestions"].push(item);
+                if (!this.items.suggestions.includes(item)) {
+                    this.items.suggestions.push(item);
                 }
             }
-            this.items["seen"] = Array();
+            this.items["done"] = Array();
         }
 
         // If we have enough suggestions
-        if (this.items["suggestions"].length >= this.number) {
+        if (this.items.suggestions.length >= this.number) {
             console.log("Updating human list...");
+
+            // Create a copy of the list to remove from
+            var suggestions = this.items.suggestions.slice();
             for(var i = 0; i<this.number; i++){
-                var randomItem = this.items["suggestions"].splice(Math.floor(Math.random()*this.items["suggestions"].length), 1);
-
-                // Add to seen
-                if (!this.items["seen"].includes(randomItem[0])) {
-                    this.items["seen"].push(randomItem[0]);
-                }
-
-                // Update interface
-                $(this.suggestionsId).append("<li class='human-menu-item' data-name='" + randomItem[0] + "'>" + randomItem[0] + "</li>") 
+                var randomItem = suggestions.splice(Math.floor(Math.random()*suggestions.length), 1);
+                this.showSuggestion(randomItem[0])
             }
 
-            // Bind the class to the correct function
-            //$("." + this.itemClass).on('click', this.chooseItem); 
- 
         } else {
-            console.log("Not enough items to populate list.")
+            $.notify("Not enough items to populate list.", "error");
+        }
+
+        // Update done items
+        for(var i = 0; i<this.items.done.length; i++){
+            var item = this.items.done[i]
+            $(this.doneId).append("<li class='human-menu-item' data-name='" + item + "'>" + item + "</li>")
         }
     }
 
     // Storage save methods
-    storageSave() {
+    storageSave(items) {
+        var items = items || this.items
         if (this.hasStorage == true) {
-           localStorage.setItem('human-menu', JSON.stringify(this.items));
+           localStorage.setItem('human-menu', JSON.stringify(items));
         }
     }
 
@@ -174,7 +199,6 @@ class HumanMenu {
 
         console.log('Loading items from storage...')
         var items = JSON.parse(localStorage.getItem('human-menu'));
-        console.log(items)
 
         if (items != null) {
 
@@ -182,18 +206,18 @@ class HumanMenu {
             if ("suggestions" in items) {
 
                 // Add items that aren't found in either, for each of suggestions and seen
-                for (var i = 0; i < items["suggestions"].length; i++) {
-                    var item = items["suggestions"][i]
-                    if ( !(this.items["suggestions"].includes(item)) && !(this.items["seen"].includes(item))) {
-                        this.items["suggestions"].push(item)
+                for (var i = 0; i < items.suggestions.length; i++) {
+                    var item = items.suggestions[i]
+                    if ( !(this.items.suggestions.includes(item)) && !(this.items.done.includes(item))) {
+                        this.items.suggestions.push(item)
                     }
                 }
             }
-            if ("seen" in items) {
-                for (var i = 0; i < items["seen"].length; i++) {
-                    var item = items["seen"][i]
-                    if ( !(this.items["suggestions"].includes(item)) && !(this.items["seen"].includes(item))) {
-                        this.items["seen"].push(item)
+            if ("done" in items) {
+                for (var i = 0; i < items.done.length; i++) {
+                    var item = items.done[i]
+                    if ( !(this.items.suggestions.includes(item)) && !(this.items.done.includes(item))) {
+                        this.items.done.push(item)
                     }
                 }
             }

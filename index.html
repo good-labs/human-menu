@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>The Human Menu</title>
     <link rel="stylesheet" href="assets/css/style.css">  
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -11,21 +12,29 @@
 
     <h1 class="title">The Human Menu</h1>
 
+    <div class="top-right">
+        <a href="https://www.github.com/good-labs/human-menu" target="_blank">
+           <i style='color:white'class="fa fa-2x fa-github"></i></a>
+    </div>
     <div class="container">     
         <h3>I want to...</h3>
            <ul id="suggestions">
-        </ul>
-      
-        <!--
-        <h3>I've completed</h3>
-          <ul id="completed-tasks">
-        </ul>
+           </ul><br>
+           <button id="refreshButton">REFRESH</button>
+    </div>
+    <div class="container">     
+        <h3>I've done...</h3>
+          <ul id="done">
+          </ul>
+    </div>
+    <div class="container">     
         <p>
-            <h3>New Task</h3><input id="newTask" type="text" placeholder="add task"><button>ADD</button>
-        </p>-->
+            <input id="newItem" type="text" placeholder="add a new item"><button id="addButton">ADD</button>
+        </p>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script  src="assets/js/human-menu.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
     <script  src="assets/js/index.js"></script>
 </body>
 </html>
