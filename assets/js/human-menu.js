@@ -174,6 +174,7 @@ class HumanMenu {
         }
 
         // Update done items
+        $(this.doneId).empty();
         for(var i = 0; i<this.items.done.length; i++){
             var item = this.items.done[i]
             $(this.doneId).append("<li class='human-menu-item' data-name='" + item + "'>" + item + "</li>")
