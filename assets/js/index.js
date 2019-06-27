@@ -9,6 +9,8 @@ $(document).ready(function() {
         var name = $("#newItem").val();
         menu.addItem(name);
         menu.showSuggestion(name);
+        $.notify("Added new item " + name + " to suggestions.", "info");
+
     })
 
     // Or refresh items
