@@ -10,7 +10,6 @@ $(document).ready(function() {
         menu.addItem(name);
         menu.showSuggestion(name);
         $.notify("Added new item " + name + " to suggestions.", "info");
-
     })
 
     // Or refresh items

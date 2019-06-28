@@ -11,6 +11,10 @@ body {
   background-color: mistyrose;
 }
 
+.notifyjs-corner {
+  font-family: Lato, sans-serif;
+}
+
 .human-menu-item {
   cursor: pointer;
 }
